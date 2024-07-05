@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 from .util import gauge_id_is_valid, resolve_camels_de_root_path
-from .get_data import get_timeseries, get_topographic_attributes, get_soil_attributes, get_landcover_attributes, get_hydrogeology_attributes, get_humaninfluence_attributes, get_climatic_attributes, get_hydrologic_attributes, get_climatic_attributes
+from .get_data import get_timeseries, get_attributes
 
 
 class Station():
@@ -78,146 +78,23 @@ class CAMELS_DE():
         """
         return Station(gauge_id)
     
-    def get_topographic_attributes(self, gauge_id: str = None) -> pd.DataFrame:
+    def get_attributes(self, type: str, gauge_id: str = None) -> pd.DataFrame:
         """
-        Get the topographic attributes of all stations.  
+        Get the attributes of a specific type.  
         If a gauge id is provided, only the attributes of that station are returned.
         
         Parameters
         ----------
+        type : str
+            The type of attributes to get.  
+            Must be one of ["topographic", "soil", "landcover", "hydrogeology", "humaninfluence", "climatic", "hydrologic", "simulation_benchmark"].
         gauge_id : str, optional
             The id of the station to get the attributes for.
-
+        
         Returns
         -------
         pd.DataFrame
-            The topographic attributes.
+            The attributes table of the specified type.
         
         """
-        return get_topographic_attributes(gauge_id)
-    
-    def get_soil_attributes(self, gauge_id: str = None) -> pd.DataFrame:
-        """
-        Get the soil attributes of all stations.  
-        If a gauge id is provided, only the attributes of that station are returned.
-        
-        Parameters
-        ----------
-        gauge_id : str, optional
-            The id of the station to get the attributes for.
-
-        Returns
-        -------
-        pd.DataFrame
-            The soil attributes.
-        
-        """
-        return get_soil_attributes(gauge_id)
-    
-    def get_landcover_attributes(self, gauge_id: str = None) -> pd.DataFrame:
-        """
-        Get the landcover attributes of all stations.  
-        If a gauge id is provided, only the attributes of that station are returned.
-        
-        Parameters
-        ----------
-        gauge_id : str, optional
-            The id of the station to get the attributes for.
-
-        Returns
-        -------
-        pd.DataFrame
-            The landcover attributes.
-        
-        """
-        return get_landcover_attributes(gauge_id)
-    
-    def get_hydrogeology_attributes(self, gauge_id: str = None) -> pd.DataFrame:
-        """
-        Get the hydrogeology attributes of all stations.  
-        If a gauge id is provided, only the attributes of that station are returned.
-        
-        Parameters
-        ----------
-        gauge_id : str, optional
-            The id of the station to get the attributes for.
-
-        Returns
-        -------
-        pd.DataFrame
-            The hydrogeology attributes.
-        
-        """
-        return get_hydrogeology_attributes(gauge_id)
-    
-    def get_humaninfluence_attributes(self, gauge_id: str = None) -> pd.DataFrame:
-        """
-        Get the human influence attributes of all stations.  
-        If a gauge id is provided, only the attributes of that station are returned.
-        
-        Parameters
-        ----------
-        gauge_id : str, optional
-            The id of the station to get the attributes for.
-
-        Returns
-        -------
-        pd.DataFrame
-            The human influence attributes.
-        
-        """
-        return get_humaninfluence_attributes(gauge_id)
-    
-    def get_climatic_attributes(self, gauge_id: str = None) -> pd.DataFrame:
-        """
-        Get the climatic attributes of all stations.  
-        If a gauge id is provided, only the attributes of that station are returned.
-        
-        Parameters
-        ----------
-        gauge_id : str, optional
-            The id of the station to get the attributes for.
-
-        Returns
-        -------
-        pd.DataFrame
-            The climatic attributes.
-        
-        """
-        return get_climatic_attributes(gauge_id)
-    
-    def get_hydrologic_attributes(self, gauge_id: str = None) -> pd.DataFrame:
-        """
-        Get the hydrologic attributes of all stations.  
-        If a gauge id is provided, only the attributes of that station are returned.
-        
-        Parameters
-        ----------
-        gauge_id : str, optional
-            The id of the station to get the attributes for.
-
-        Returns
-        -------
-        pd.DataFrame
-            The hydrologic attributes.
-        
-        """
-        return get_hydrologic_attributes(gauge_id)
-    
-    def get_climatic_attributes(self, gauge_id: str = None) -> pd.DataFrame:
-        """
-        Get the climatic attributes of all stations.  
-        If a gauge id is provided, only the attributes of that station are returned.
-        
-        Parameters
-        ----------
-        gauge_id : str, optional
-            The id of the station to get the attributes for.
-
-        Returns
-        -------
-        pd.DataFrame
-            The climatic attributes.
-        
-        """
-        return get_climatic_attributes(gauge_id)
+        return get_attributes(type, gauge_id)

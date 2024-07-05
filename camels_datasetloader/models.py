@@ -4,6 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 from .util import gauge_id_is_valid, resolve_camels_de_root_path
+from .get_data import get_topographic_attributes, get_soil_attributes, get_landcover_attributes, get_hydrogeology_attributes, get_humaninfluence_attributes, get_climatic_attributes, get_hydrologic_attributes, get_climatic_attributes
 
 
 class Station():
@@ -25,7 +26,7 @@ class Station():
 
     def __repr__(self):
         return f"{self.gauge_id} Station object"
-        
+
 
 class CAMELS_DE():
     """
@@ -75,14 +76,7 @@ class CAMELS_DE():
             The topographic attributes.
         
         """
-        df = pd.read_csv(self.root / "CAMELS_DE_topographic_attributes.csv")
-
-        if gauge_id is not None:
-            if not gauge_id_is_valid(gauge_id):
-                raise ValueError(f"{gauge_id} is not a valid CAMELS-DE gauge id.")
-            return df[df["gauge_id"] == gauge_id]
-        
-        return df
+        return get_topographic_attributes(gauge_id)
     
     def get_soil_attributes(self, gauge_id: str = None) -> pd.DataFrame:
         """
@@ -100,14 +94,7 @@ class CAMELS_DE():
             The soil attributes.
         
         """
-        df = pd.read_csv(self.root / "CAMELS_DE_soil_attributes.csv")
-
-        if gauge_id is not None:
-            if not gauge_id_is_valid(gauge_id):
-                raise ValueError(f"{gauge_id} is not a valid CAMELS-DE gauge id.")
-            return df[df["gauge_id"] == gauge_id]
-        
-        return df
+        return get_soil_attributes(gauge_id)
     
     def get_landcover_attributes(self, gauge_id: str = None) -> pd.DataFrame:
         """
@@ -125,14 +112,7 @@ class CAMELS_DE():
             The landcover attributes.
         
         """
-        df = pd.read_csv(self.root / "CAMELS_DE_landcover_attributes.csv")
-
-        if gauge_id is not None:
-            if not gauge_id_is_valid(gauge_id):
-                raise ValueError(f"{gauge_id} is not a valid CAMELS-DE gauge id.")
-            return df[df["gauge_id"] == gauge_id]
-        
-        return df
+        return get_landcover_attributes(gauge_id)
     
     def get_hydrogeology_attributes(self, gauge_id: str = None) -> pd.DataFrame:
         """
@@ -150,14 +130,7 @@ class CAMELS_DE():
             The hydrogeology attributes.
         
         """
-        df = pd.read_csv(self.root / "CAMELS_DE_hydrogeology_attributes.csv")
-
-        if gauge_id is not None:
-            if not gauge_id_is_valid(gauge_id):
-                raise ValueError(f"{gauge_id} is not a valid CAMELS-DE gauge id.")
-            return df[df["gauge_id"] == gauge_id]
-        
-        return df
+        return get_hydrogeology_attributes(gauge_id)
     
     def get_humaninfluence_attributes(self, gauge_id: str = None) -> pd.DataFrame:
         """
@@ -175,14 +148,7 @@ class CAMELS_DE():
             The human influence attributes.
         
         """
-        df = pd.read_csv(self.root / "CAMELS_DE_humaninfluence_attributes.csv")
-
-        if gauge_id is not None:
-            if not gauge_id_is_valid(gauge_id):
-                raise ValueError(f"{gauge_id} is not a valid CAMELS-DE gauge id.")
-            return df[df["gauge_id"] == gauge_id]
-        
-        return df
+        return get_humaninfluence_attributes(gauge_id)
     
     def get_climatic_attributes(self, gauge_id: str = None) -> pd.DataFrame:
         """
@@ -200,14 +166,7 @@ class CAMELS_DE():
             The climatic attributes.
         
         """
-        df = pd.read_csv(self.root / "CAMELS_DE_climatic_attributes.csv")
-
-        if gauge_id is not None:
-            if not gauge_id_is_valid(gauge_id):
-                raise ValueError(f"{gauge_id} is not a valid CAMELS-DE gauge id.")
-            return df[df["gauge_id"] == gauge_id]
-        
-        return df
+        return get_climatic_attributes(gauge_id)
     
     def get_hydrologic_attributes(self, gauge_id: str = None) -> pd.DataFrame:
         """
@@ -225,14 +184,7 @@ class CAMELS_DE():
             The hydrologic attributes.
         
         """
-        df = pd.read_csv(self.root / "CAMELS_DE_hydrologic_attributes.csv")
-
-        if gauge_id is not None:
-            if not gauge_id_is_valid(gauge_id):
-                raise ValueError(f"{gauge_id} is not a valid CAMELS-DE gauge id.")
-            return df[df["gauge_id"] == gauge_id]
-        
-        return df
+        return get_hydrologic_attributes(gauge_id)
     
     def get_climatic_attributes(self, gauge_id: str = None) -> pd.DataFrame:
         """
@@ -250,11 +202,4 @@ class CAMELS_DE():
             The climatic attributes.
         
         """
-        df = pd.read_csv(self.root / "CAMELS_DE_climatic_attributes.csv")
-
-        if gauge_id is not None:
-            if not gauge_id_is_valid(gauge_id):
-                raise ValueError(f"{gauge_id} is not a valid CAMELS-DE gauge id.")
-            return df[df["gauge_id"] == gauge_id]
-        
-        return df
+        return get_climatic_attributes(gauge_id)

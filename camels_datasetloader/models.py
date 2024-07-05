@@ -5,7 +5,7 @@ import pandas as pd
 import geopandas as gpd
 
 from .util import gauge_id_is_valid, resolve_camels_de_root_path
-from .get_data import get_timeseries, get_attributes, get_catchments
+from .get_data import get_timeseries, get_attributes, get_catchments_geometry, get_stations_geometry
 
 
 class Station():
@@ -66,7 +66,7 @@ class Station():
         """
         return get_attributes(type, self.gauge_id, variables)
 
-    def get_catchments(self) -> gpd.GeoDataFrame:
+    def get_catchments_geometry(self) -> gpd.GeoDataFrame:
         """
         Get the catchment boundaries of the station.
         
@@ -76,7 +76,19 @@ class Station():
             The catchments GeoDataFrame table.
         
         """
-        return get_catchments(self.gauge_id)        
+        return get_catchments_geometry(self.gauge_id)
+
+    def get_stations_geometry(self) -> gpd.GeoDataFrame:
+        """
+        Get the location of the station.
+        
+        Returns
+        -------
+        gpd.GeoDataFrame
+            The station GeoDataFrame table.
+        
+        """
+        return get_stations_geometry(self.gauge_id)
 
 class CAMELS_DE():
     """
@@ -133,7 +145,7 @@ class CAMELS_DE():
         """
         return get_attributes(type, gauge_id, variables)
     
-    def get_catchments(self, gauge_id: str = None) -> gpd.GeoDataFrame:
+    def get_catchments_geometry(self, gauge_id: str = None) -> gpd.GeoDataFrame:
         """
         Get the catchment boundaries.  
         If a gauge id is provided, only the catchments for that station are returned.
@@ -149,4 +161,22 @@ class CAMELS_DE():
             The catchments GeoDataFrame table.
         
         """
-        return get_catchments(gauge_id)
+        return get_catchments_geometry(gauge_id)
+    
+    def get_stations_geometry(self, gauge_id: str = None) -> gpd.GeoDataFrame:
+        """
+        Get the station locations.  
+        If a gauge id is provided, only the station for that id is returned.
+        
+        Parameters
+        ----------
+        gauge_id : str, optional
+            The id of the station to get the stations for.
+        
+        Returns
+        -------
+        gpd.GeoDataFrame
+            The stations GeoDataFrame table.
+        
+        """
+        return get_stations_geometry(gauge_id)

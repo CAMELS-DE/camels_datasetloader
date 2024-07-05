@@ -2,9 +2,10 @@ import os
 from pathlib import Path
 
 import pandas as pd
+import geopandas as gpd
 
 from .util import gauge_id_is_valid, resolve_camels_de_root_path
-from .get_data import get_timeseries, get_attributes
+from .get_data import get_timeseries, get_attributes, get_catchments
 
 
 class Station():
@@ -44,7 +45,38 @@ class Station():
         
         """
         return get_timeseries(self.gauge_id, variables)
+
+    def get_attributes(self, type: str, variables: list[str] = None) -> pd.DataFrame:
+        """
+        Get the attributes of a specific type.
         
+        Parameters
+        ----------
+        type : str
+            The type of attributes to get.  
+            Must be one of ["topographic", "soil", "landcover", "hydrogeology", "humaninfluence", "climatic", "hydrologic", "simulation_benchmark"].
+        variables : list[str], optional
+            The variables to get the attributes for.
+        
+        Returns
+        -------
+        pd.DataFrame
+            The attributes table of the specified type.
+        
+        """
+        return get_attributes(type, self.gauge_id, variables)
+
+    def get_catchments(self) -> gpd.GeoDataFrame:
+        """
+        Get the catchment boundaries of the station.
+        
+        Returns
+        -------
+        gpd.GeoDataFrame
+            The catchments GeoDataFrame table.
+        
+        """
+        return get_catchments(self.gauge_id)        
 
 class CAMELS_DE():
     """
@@ -78,7 +110,7 @@ class CAMELS_DE():
         """
         return Station(gauge_id)
     
-    def get_attributes(self, type: str, gauge_id: str = None) -> pd.DataFrame:
+    def get_attributes(self, type: str, gauge_id: str = None, variables: list[str] = None) -> pd.DataFrame:
         """
         Get the attributes of a specific type.  
         If a gauge id is provided, only the attributes of that station are returned.
@@ -90,6 +122,8 @@ class CAMELS_DE():
             Must be one of ["topographic", "soil", "landcover", "hydrogeology", "humaninfluence", "climatic", "hydrologic", "simulation_benchmark"].
         gauge_id : str, optional
             The id of the station to get the attributes for.
+        variables : list[str], optional
+            The variables to get the attributes for.
         
         Returns
         -------
@@ -97,4 +131,22 @@ class CAMELS_DE():
             The attributes table of the specified type.
         
         """
-        return get_attributes(type, gauge_id)
+        return get_attributes(type, gauge_id, variables)
+    
+    def get_catchments(self, gauge_id: str = None) -> gpd.GeoDataFrame:
+        """
+        Get the catchment boundaries.  
+        If a gauge id is provided, only the catchments for that station are returned.
+        
+        Parameters
+        ----------
+        gauge_id : str, optional
+            The id of the station to get the catchments for.
+        
+        Returns
+        -------
+        gpd.GeoDataFrame
+            The catchments GeoDataFrame table.
+        
+        """
+        return get_catchments(gauge_id)

@@ -1,4 +1,5 @@
 import pandas as pd
+import geopandas as gpd
 
 from .util import gauge_id_is_valid, resolve_camels_de_root_path
 
@@ -37,9 +38,37 @@ def get_timeseries(gauge_id: str, variables: list[str] = None) -> pd.DataFrame:
     
     return df
 
-def get_attributes(type: str, gauge_id: str = None) -> pd.DataFrame:
+def get_catchments(gauge_id: str = None) -> gpd.GeoDataFrame:
+    """
+    Function to get the catchment boundaries.  
+    If a gauge_id is provided, only the catchments for that station are returned.
+
+    
+    Parameters
+    ----------
+    gauge_id : str, optional
+        The id of the station to get the catchments for.
+
+    Returns
+    -------
+    gpd.GeoDataFrame
+        The catchments GeoDataFrame table.
+
+    """
+    root = resolve_camels_de_root_path()
+    catchments = gpd.read_file(root / "CAMELS_DE_catchment_boundaries" / "catchments" / "CAMELS_DE_catchments.gpkg")
+    
+    if gauge_id is not None:
+        if not gauge_id_is_valid(gauge_id):
+            raise ValueError(f"{gauge_id} is not a valid CAMELS-DE gauge id.")
+        return catchments[catchments["gauge_id"] == gauge_id]
+    
+    return catchments
+
+def get_attributes(type: str, gauge_id: str = None, variables: list[str] = None) -> pd.DataFrame:
     """
     Function to get the attributes of a specific type.
+    If a gauge_id is provided, only the attributes for that station are returned.
     
     Parameters
     ----------
@@ -48,6 +77,8 @@ def get_attributes(type: str, gauge_id: str = None) -> pd.DataFrame:
         Must be one of ["topographic", "soil", "landcover", "hydrogeology", "humaninfluence", "climatic", "hydrologic", "simulation_benchmark"].
     gauge_id : str, optional
         The id of the station to get the attributes for.
+    variables : list[str], optional
+        The variables to get the attributes for.
 
     Returns
     -------
@@ -68,5 +99,18 @@ def get_attributes(type: str, gauge_id: str = None) -> pd.DataFrame:
         if not gauge_id_is_valid(gauge_id):
             raise ValueError(f"{gauge_id} is not a valid CAMELS-DE gauge id.")
         return df[df["gauge_id"] == gauge_id]
+    
+    if variables is not None:
+        # make sure variables is a list
+        if not isinstance(variables, list):
+            variables = [variables]
+
+        # check if variables are in columns
+        for variable in variables:
+            if variable not in df.columns:
+                raise ValueError(f"{variable} is not a valid variable.")
+        
+        # return only the selected variables
+        return df[variables]
     
     return df

@@ -3,6 +3,40 @@ import pandas as pd
 from .util import gauge_id_is_valid, resolve_camels_de_root_path
 
 
+def get_timeseries(gauge_id: str, variables: list[str] = None) -> pd.DataFrame:
+    """
+    Get the timeseries data of the station.  
+    If a list of variables is provided, only the data for those variables is returned.
+    
+    Parameters
+    ----------
+    variables : list[str], optional
+        The variables to get the timeseries data for.
+    
+    Returns
+    -------
+    pd.DataFrame
+        The timeseries data.
+    
+    """
+    root = resolve_camels_de_root_path()
+    df = pd.read_csv(root / "timeseries" / f"CAMELS_DE_hydromet_timeseries_{gauge_id}.csv", parse_dates=["date"], index_col="date")
+    
+    if variables is not None:
+        # make sure variables is a list
+        if not isinstance(variables, list):
+            variables = [variables]
+
+        # check if variables are in columns
+        for variable in variables:
+            if variable not in df.columns:
+                raise ValueError(f"{variable} is not a valid variable.")
+        
+        # return only the selected variables
+        return df[variables]
+    
+    return df
+
 def get_topographic_attributes(gauge_id: str = None) -> pd.DataFrame:
     """
     Get the topographic attributes of all stations.  

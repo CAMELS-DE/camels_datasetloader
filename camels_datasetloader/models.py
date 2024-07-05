@@ -4,7 +4,7 @@ from pathlib import Path
 import pandas as pd
 
 from .util import gauge_id_is_valid, resolve_camels_de_root_path
-from .get_data import get_topographic_attributes, get_soil_attributes, get_landcover_attributes, get_hydrogeology_attributes, get_humaninfluence_attributes, get_climatic_attributes, get_hydrologic_attributes, get_climatic_attributes
+from .get_data import get_timeseries, get_topographic_attributes, get_soil_attributes, get_landcover_attributes, get_hydrogeology_attributes, get_humaninfluence_attributes, get_climatic_attributes, get_hydrologic_attributes, get_climatic_attributes
 
 
 class Station():
@@ -26,7 +26,25 @@ class Station():
 
     def __repr__(self):
         return f"{self.gauge_id} Station object"
-
+    
+    def get_timeseries(self, variables: list[str] = None) -> pd.DataFrame:
+        """
+        Get the timeseries data of the station.  
+        If a list of variables is provided, only the data for those variables is returned.
+        
+        Parameters
+        ----------
+        variables : list[str], optional
+            The variables to get the timeseries data for.
+        
+        Returns
+        -------
+        pd.DataFrame
+            The timeseries data.
+        
+        """
+        return get_timeseries(self.gauge_id, variables)
+        
 
 class CAMELS_DE():
     """

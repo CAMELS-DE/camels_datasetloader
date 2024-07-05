@@ -38,7 +38,7 @@ def get_timeseries(gauge_id: str, variables: list[str] = None) -> pd.DataFrame:
     
     return df
 
-def get_catchments(gauge_id: str = None) -> gpd.GeoDataFrame:
+def get_catchments_geometry(gauge_id: str = None) -> gpd.GeoDataFrame:
     """
     Function to get the catchment boundaries.  
     If a gauge_id is provided, only the catchments for that station are returned.
@@ -64,6 +64,31 @@ def get_catchments(gauge_id: str = None) -> gpd.GeoDataFrame:
         return catchments[catchments["gauge_id"] == gauge_id]
     
     return catchments
+
+def get_stations_geometry(gauge_id: str = None) -> gpd.GeoDataFrame:
+    """
+    Function to get the station locations.
+    
+    Parameters
+    ----------
+    gauge_id : str, optional
+        The id of the station to get the stations for.
+
+    Returns
+    -------
+    gpd.GeoDataFrame
+        The stations GeoDataFrame table.
+
+    """
+    root = resolve_camels_de_root_path()
+    stations = gpd.read_file(root / "CAMELS_DE_catchment_boundaries" / "gauging_stations" / "CAMELS_DE_gauging_stations.gpkg")
+    
+    if gauge_id is not None:
+        if not gauge_id_is_valid(gauge_id):
+            raise ValueError(f"{gauge_id} is not a valid CAMELS-DE gauge id.")
+        return stations[stations["gauge_id"] == gauge_id]
+    
+    return stations
 
 def get_attributes(type: str, gauge_id: str = None, variables: list[str] = None) -> pd.DataFrame:
     """

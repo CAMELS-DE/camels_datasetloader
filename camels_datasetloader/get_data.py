@@ -118,7 +118,10 @@ def get_attributes(type: str, gauge_id: str = None, variables: list[str] = None)
     root = resolve_camels_de_root_path()
 
     # Load the attributes
-    df = pd.read_csv(root / f"CAMELS_DE_{type}_attributes.csv")
+    if type == "simulation_benchmark":
+        df = pd.read_csv(root / f"CAMELS_DE_{type}.csv")
+    else:
+        df = pd.read_csv(root / f"CAMELS_DE_{type}_attributes.csv")
 
     if gauge_id is not None:
         if not gauge_id_is_valid(gauge_id):

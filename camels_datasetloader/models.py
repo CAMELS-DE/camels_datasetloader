@@ -122,6 +122,26 @@ class CAMELS_DE():
         """
         return Station(gauge_id)
     
+    def get_timeseries(self, gauge_id: str, variables: list[str] = None) -> pd.DataFrame:
+        """
+        Get the timeseries data of a station.  
+        If a list of variables is provided, only the data for those variables is returned.
+        
+        Parameters
+        ----------
+        gauge_id : str
+            The id of the station.
+        variables : list[str], optional
+            The variables to get the timeseries data for.
+        
+        Returns
+        -------
+        pd.DataFrame
+            The timeseries data.
+        
+        """
+        return get_timeseries(gauge_id, variables)
+    
     def get_attributes(self, type: str, gauge_id: str = None, variables: list[str] = None) -> pd.DataFrame:
         """
         Get the attributes of a specific type.  
